@@ -28,10 +28,7 @@ const productSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    images: {
-      type: Array,
-      default: [],
-    },
+    images: [String],
   },
   {
     timestamps: true,

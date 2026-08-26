@@ -8,6 +8,7 @@ const morgan = require("morgan");
 const authRouter = require("./routes/authRoutes.js");
 const connectDB = require("./config/db.js");
 const productRouter = require("./routes/productRoutes.js");
+const cartRouter = require("./routes/cartRoutes.js");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
+app.use("/api/cart", cartRouter);
 
 const dns = require("dns");
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
