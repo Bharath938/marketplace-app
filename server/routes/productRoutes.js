@@ -4,6 +4,8 @@ const {
   createProduct,
   getAllProducts,
   getProductById,
+  deleteProduct,
+  updateProduct,
 } = require("../controllers/productController.js");
 const allowRoles = require("../middlewares/roleMiddleware.js");
 const router = express.Router();
@@ -11,5 +13,7 @@ const router = express.Router();
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
 router.post("/", authMiddleware, allowRoles("vendor", "admin"), createProduct);
+router.patch("/:id", authMiddleware, updateProduct);
+router.delete("/:id", authMiddleware, deleteProduct);
 
 module.exports = router;

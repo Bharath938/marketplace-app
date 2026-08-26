@@ -39,4 +39,53 @@ const createProduct = async (req, res) => {
   }
 };
 
-module.exports = { getAllProducts, getProductById, createProduct };
+const updateProduct = async (req, res) => {
+  const { id: productId } = req.params;
+  try {
+    const product = await Product.findById(productId);
+
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    if (product.vendor.toString() !== req.user.id && req.user.role !== "admin")
+      return res
+        .status(403)
+        .json({ message: "Not allowed to perform this action" });
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      req.body,
+      { new: true, runValidators: true },
+    );
+
+    res.status(201).json({ message: "Product Updated", updatedProduct });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  const { id: productId } = req.params;
+
+  try {
+    const product = await Product.findById(productId);
+
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    if (product.vendor.toString() !== req.user.id && req.user.role !== "admin")
+      return res
+        .status(403)
+        .json({ message: "Not allowed to perform this action" });
+
+    await Product.deleteOne({ _id: productId });
+
+    res.status(200).json({ message: "Product Deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = {
+  getAllProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};
