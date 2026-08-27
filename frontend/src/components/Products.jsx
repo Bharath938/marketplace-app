@@ -2,8 +2,7 @@ import React from "react";
 import { useAuth } from "../context/AuthContext";
 
 function Products() {
-  const { user } = useAuth();
-  return <div>Hi {user.name}</div>;
+  return <div>Hi Prducts</div>;
 }
 
 export default Products;
