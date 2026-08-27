@@ -77,7 +77,7 @@ function Login() {
 
       login(response.data.user, response.data.token);
 
-      navigate("/");
+      navigate("/", { replace: true });
     } catch (err) {
       setError(err.response.data.message);
     } finally {

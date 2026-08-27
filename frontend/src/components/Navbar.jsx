@@ -1,11 +1,10 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { BsCart2 } from "react-icons/bs";
 
 function Navbar() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   return (
     <nav className="flex justify-between items-center px-8 py-2">
@@ -32,7 +31,7 @@ function Navbar() {
           {user ? (
             <span
               onClick={() => {
-                (logout(), navigate("/login"));
+                (logout(), (<Navigate to="/login" replace />));
               }}
               className="hover:text-blue-400"
             >

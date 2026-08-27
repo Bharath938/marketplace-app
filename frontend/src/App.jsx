@@ -7,9 +7,9 @@ import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import { useAuth } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const { user } = useAuth();
   return (
     <Router>
       <Navbar />
@@ -17,12 +17,22 @@ function App() {
         <Route path="/" element={<Products />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        {user && (
-          <>
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-          </>
-        )}
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
