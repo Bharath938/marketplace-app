@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import API from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { login } = useAuth();
+
   const inputFieldData = [
     {
       id: 1,
@@ -53,8 +55,6 @@ function Login() {
 
     if (!formData.password) {
       newErrors.password = "Please Provide password";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Passoword can not be less than 6 characters";
     }
 
     setErrors(newErrors);
@@ -75,10 +75,9 @@ function Login() {
       setError(null);
       const response = await API.post("/auth/login", formData);
 
-      if (response.status !== 201)
-        throw new Error(response.data.message || "Failed to submit");
+      login(response.data.user, response.data.token);
 
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       setError(err.response.data.message);
     } finally {
@@ -90,12 +89,15 @@ function Login() {
     <div className="flex justify-center items-center bg-gray-50 w-screen h-screen">
       <div className="flex flex-col bg-white w-[380px] items-center border border-gray-200 rounded-xl p-8">
         <div className="text-center mb-6">
-          <h1 className="text-xl font-semibold mb-1">Login</h1>
-          <p className="text-sm text-gray-500">Let's Start</p>
+          <h1 className="text-xl font-semibold mb-1">Login to your account</h1>
+          <p className="text-sm text-gray-500">Welcome back</p>
         </div>
         <form onSubmit={handleSubmit} className="w-full">
           {inputFieldData.map((inputField) => (
-            <div key={inputField.id} className="flex flex-col space-y-2 w-full">
+            <div
+              key={inputField.id}
+              className="flex flex-col space-y-2 mb-4 w-full"
+            >
               <label
                 htmlFor={inputField.name}
                 className="text-sm text-gray-600 mb-1"
@@ -122,7 +124,7 @@ function Login() {
             type="submit"
             className="w-full bg-gray-900 font-medium text-white py-2 rounded-md mt-2 cursor-pointer"
           >
-            {loading ? "Signing..." : "Signup"}
+            {loading ? "Loging in..." : "Login"}
           </button>
           {error && (
             <p className="text-sm text-red-500 mt-1 text-center">{error}</p>
